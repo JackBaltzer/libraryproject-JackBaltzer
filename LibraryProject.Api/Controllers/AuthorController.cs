@@ -1,5 +1,6 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using LibraryProject.Api.DTOs;
 using Microsoft.AspNetCore.Mvc;
+using System.Collections.Generic;
 
 namespace LibraryProject.Api.Controllers
 {
@@ -10,7 +11,28 @@ namespace LibraryProject.Api.Controllers
         [HttpGet]
         public IActionResult GetAll()
         {
-            return Ok("Hello World");
+            List<AuthorResponse> authors = new();
+
+            authors.Add(new()
+            {
+                Id = 1,
+                FirstName = "George",
+                LastName = "Martin",
+                MiddleName = "R.R.",
+                BirthYear = 1948
+            });
+
+            authors.Add(new()
+            {
+                Id = 2,
+                FirstName = "Lewis",
+                LastName = "Carol",
+                MiddleName = "",
+                BirthYear = 1832,
+                YearOfDeath = 1898
+            });
+
+            return Ok(authors);
         }
     }
 }
