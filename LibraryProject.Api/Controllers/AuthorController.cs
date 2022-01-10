@@ -1,5 +1,7 @@
 ﻿using LibraryProject.Api.DTOs;
+using LibraryProject.Api.Services;
 using Microsoft.AspNetCore.Mvc;
+using System;
 using System.Collections.Generic;
 
 namespace LibraryProject.Api.Controllers
@@ -8,31 +10,36 @@ namespace LibraryProject.Api.Controllers
     [ApiController]
     public class AuthorController : ControllerBase
     {
+        private readonly IAuthorService _authorService;
+
+        public AuthorController(IAuthorService authorService)
+        {
+            _authorService = authorService;
+        }
+
         [HttpGet]
         public IActionResult GetAll()
         {
-            List<AuthorResponse> authors = new();
-
-            authors.Add(new()
+            try
             {
-                Id = 1,
-                FirstName = "George",
-                LastName = "Martin",
-                MiddleName = "R.R.",
-                BirthYear = 1948
-            });
+                List<AuthorResponse> authorResponses = _authorService.GetAllAuthors();
 
-            authors.Add(new()
+                if (authorResponses == null)
+                {
+                    return Problem("Got no data, not even an empty list, this is unexpected");
+                }
+
+                if (authorResponses.Count == 0)
+                {
+                    return NoContent();
+                }
+
+                return Ok(authorResponses);
+            }
+            catch (Exception ex)
             {
-                Id = 2,
-                FirstName = "Lewis",
-                LastName = "Carol",
-                MiddleName = "",
-                BirthYear = 1832,
-                YearOfDeath = 1898
-            });
-
-            return Ok(authors);
+                return Problem(ex.Message);
+            }
         }
     }
 }
