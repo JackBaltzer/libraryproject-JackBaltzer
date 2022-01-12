@@ -1,39 +1,39 @@
-﻿using LibraryProject.Api.DTOs;
+﻿using LibraryProject.Api.Database.Entites;
+using LibraryProject.Api.DTOs;
+using LibraryProject.Api.Repositories;
 using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace LibraryProject.Api.Services
 {
     public interface IAuthorService
     {
-        List<AuthorResponse> GetAllAuthors();
+        Task<List<AuthorResponse>> GetAllAuthors();
     }
 
     public class AuthorService : IAuthorService
     {
-        public List<AuthorResponse> GetAllAuthors()
+        private readonly IAuthorRepository _authorRepository;
+
+        public AuthorService(IAuthorRepository authorRepository)
         {
-            List<AuthorResponse> authors = new();
+            _authorRepository = authorRepository;
+        }
 
-            authors.Add(new()
+        public async Task<List<AuthorResponse>> GetAllAuthors()
+        {
+            List<Author> authors = await _authorRepository.SelectAllAuthors();
+
+            return authors.Select(author => new AuthorResponse
             {
-                Id = 1,
-                FirstName = "George",
-                LastName = "Martin",
-                MiddleName = "R.R.",
-                BirthYear = 1948
-            });
-
-            authors.Add(new()
-            {
-                Id = 2,
-                FirstName = "Lewis",
-                LastName = "Carol",
-                MiddleName = "",
-                BirthYear = 1832,
-                YearOfDeath = 1898
-            });
-
-            return authors;
+                Id = author.Id,
+                FirstName = author.FirstName,
+                LastName = author.LastName,
+                MiddleName = author.MiddleName,
+                BirthYear = author.BirthYear,
+                YearOfDeath = author.YearOfDeath
+            }).ToList();
         }
     }
 }

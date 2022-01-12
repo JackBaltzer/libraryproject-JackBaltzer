@@ -3,6 +3,7 @@ using LibraryProject.Api.Services;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace LibraryProject.Api.Controllers
 {
@@ -18,11 +19,11 @@ namespace LibraryProject.Api.Controllers
         }
 
         [HttpGet]
-        public IActionResult GetAll()
+        public async Task<IActionResult> GetAll()
         {
             try
             {
-                List<AuthorResponse> authorResponses = _authorService.GetAllAuthors();
+                List<AuthorResponse> authorResponses = await _authorService.GetAllAuthors();
 
                 if (authorResponses == null)
                 {

@@ -19,7 +19,7 @@ namespace LibraryProject.Tests.Controllers
         }
 
         [Fact]
-        public void GetAll_ShouldReturnStatusCode200_WhenAuthorsExists()
+        public async void GetAll_ShouldReturnStatusCode200_WhenAuthorsExists()
         {
             // Arrange
             List<AuthorResponse> authors = new();
@@ -45,10 +45,10 @@ namespace LibraryProject.Tests.Controllers
 
             _mockAuthorService
                 .Setup(x => x.GetAllAuthors())
-                .Returns(authors);
+                .ReturnsAsync(authors);
 
             // Act
-            var result = _authorController.GetAll();
+            var result = await _authorController.GetAll();
 
             // Assert
             var statusCodeResult = (IStatusCodeActionResult)result;
@@ -56,17 +56,17 @@ namespace LibraryProject.Tests.Controllers
         }
 
         [Fact]
-        public void GetAll_ShouldReturnStatusCode204_WhenNoAuthorsExists()
+        public async void GetAll_ShouldReturnStatusCode204_WhenNoAuthorsExists()
         {
             // Arrange
             List<AuthorResponse> authors = new();
 
             _mockAuthorService
                 .Setup(x => x.GetAllAuthors())
-                .Returns(authors);
+                .ReturnsAsync(authors);
 
             // Act
-            var result = _authorController.GetAll();
+            var result = await _authorController.GetAll();
 
             // Assert
             var statusCodeResult = (IStatusCodeActionResult)result;
@@ -74,15 +74,15 @@ namespace LibraryProject.Tests.Controllers
         }
 
         [Fact]
-        public  void GetAll_ShouldReturnStatusCode500_WhenNullIsReturnedFromService()
+        public async void GetAll_ShouldReturnStatusCode500_WhenNullIsReturnedFromService()
         {
             // Arrange
             _mockAuthorService
                 .Setup(x => x.GetAllAuthors())
-                .Returns(() => null);
+                .ReturnsAsync(() => null);
 
             // Act
-            var result =  _authorController.GetAll();
+            var result = await _authorController.GetAll();
 
             // Assert
             var statusCodeResult = (IStatusCodeActionResult)result;
@@ -90,15 +90,15 @@ namespace LibraryProject.Tests.Controllers
         }
 
         [Fact]
-        public void GetAll_ShouldReturnStatusCode500_WhenExceptionIsRaised()
+        public async void GetAll_ShouldReturnStatusCode500_WhenExceptionIsRaised()
         {
             // Arrange
             _mockAuthorService
                 .Setup(x => x.GetAllAuthors())
-                .Returns(() => throw new System.Exception("This is an exception"));
+                .ReturnsAsync(() => throw new System.Exception("This is an exception"));
 
             // Act
-            var result = _authorController.GetAll();
+            var result = await _authorController.GetAll();
 
             // Assert
             var statusCodeResult = (IStatusCodeActionResult)result;
