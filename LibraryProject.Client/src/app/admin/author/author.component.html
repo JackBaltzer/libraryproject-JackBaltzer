@@ -1,0 +1,33 @@
+<h1>Forfatter Administration</h1>
+
+<div>
+  <label>Fornavn</label>
+  <input [(ngModel)]="author.firstName">
+</div>
+<div>
+  <label>Mellemnavn</label>
+  <input [(ngModel)]="author.middleName">
+</div>
+<div>
+  <label>Efternavn</label>
+  <input [(ngModel)]="author.lastName">
+</div>
+<div>
+  <label>Fødselsår</label>
+  <input [(ngModel)]="author.birthYear">
+</div>
+<div>
+  <label>Dødsår</label>
+  <input [(ngModel)]="author.yearOfDeath">
+</div>
+<button (click)="save()">Gem</button>
+<button (click)="cancel()">Annuller</button>
+
+
+<ul *ngIf="authors.length > 0">
+  <li *ngFor="let author of authors">
+    <button (click)="edit(author)">Ret</button>
+    <button (click)="delete(author)">Slet</button>
+    {{ author.id }} - {{ author.lastName }}, {{ author.firstName }} {{ author.middleName }}
+  </li>
+</ul>
